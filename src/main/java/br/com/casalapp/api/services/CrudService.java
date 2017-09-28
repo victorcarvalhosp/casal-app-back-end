@@ -1,10 +1,13 @@
 package br.com.casalapp.api.services;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
-
+import br.com.casalapp.api.dtos.TarefaDto;
 import br.com.casalapp.api.entities.AbstractBaseEntity;
+import br.com.casalapp.api.entities.ListaTarefas;
+import br.com.casalapp.api.enums.PeriodoTarefaEnum;
 
 public interface CrudService<T extends AbstractBaseEntity> {
 

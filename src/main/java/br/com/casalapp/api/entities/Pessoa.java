@@ -1,26 +1,18 @@
 package br.com.casalapp.api.entities;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import br.com.casalapp.api.enums.PerfilEnum;
 
@@ -35,12 +27,15 @@ public class Pessoa extends AbstractBaseEntity implements Serializable {
 	private String email;
 	private String senha;
 	private PerfilEnum perfil;
+	private Pessoa parceiro;
+	private Configuracoes configuracoes;
+	
 
 	public Pessoa() {
 	}
 
 	@Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	public Long getId() {
 		return id;
 	}
@@ -73,7 +68,7 @@ public class Pessoa extends AbstractBaseEntity implements Serializable {
 		this.perfil = perfil;
 	}
 
-	@Column(name = "senha", nullable = false)
+	@Column(name = "senha", nullable = true)
 	public String getSenha() {
 		return senha;
 	}
@@ -81,8 +76,28 @@ public class Pessoa extends AbstractBaseEntity implements Serializable {
 	public void setSenha(String senha) {
 		this.senha = senha;
 	}
+	
+	
+	@OneToOne
+    @JoinColumn(name = "parceiro_id")
+	public Pessoa getParceiro() {
+		return parceiro;
+	}
 
-     
+	public void setParceiro(Pessoa parceiro) {
+		this.parceiro = parceiro;
+	}
+	
+	@OneToOne(cascade=CascadeType.ALL)
+    @JoinColumn(nullable=false, name = "configuracoes_id")
+	public Configuracoes getConfiguracoes() {
+		return configuracoes;
+	}
+
+	public void setConfiguracoes(Configuracoes configuracoes) {
+		this.configuracoes = configuracoes;
+	}
+
 	@Override
 	public String toString() {
 		return "Pessoa [id=" + id + ", nome=" + nome + ", email=" + email + ", senha=" + senha;

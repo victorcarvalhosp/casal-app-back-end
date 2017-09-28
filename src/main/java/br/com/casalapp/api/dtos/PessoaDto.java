@@ -6,22 +6,14 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
-public class PessoaDto implements Dto {
+public class PessoaDto extends AbstractDto {
 
-	private Long id;
 	private String nome;
 	private String email;
-	private Optional<String> senha = Optional.empty();
+	private Optional<Long> parceiroId = Optional.empty();
+	private ConfiguracoesDto configuracoes;
 
 	public PessoaDto() {
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	@NotEmpty(message = "Nome não pode ser vazio.")
@@ -45,16 +37,25 @@ public class PessoaDto implements Dto {
 		this.email = email;
 	}
 
-	public Optional<String> getSenha() {
-		return senha;
+	
+	public Optional<Long> getParceiroId() {
+		return parceiroId;
 	}
 
-	public void setSenha(Optional<String> senha) {
-		this.senha = senha;
+	public void setParceiroId(Optional<Long> parceiroId) {
+		this.parceiroId = parceiroId;
+	}
+
+	public ConfiguracoesDto getConfiguracoes() {
+		return configuracoes;
+	}
+
+	public void setConfiguracoes(ConfiguracoesDto configuracoes) {
+		this.configuracoes = configuracoes;
 	}
 
 	@Override
 	public String toString() {
-		return "FuncionarioDto [id=" + id + ", nome=" + nome + ", email=" + email + ", senha=" + senha;
+		return "FuncionarioDto [id=" + id + ", nome=" + nome + ", email=" + email;
 	}
 }

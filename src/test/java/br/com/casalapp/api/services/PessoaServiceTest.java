@@ -16,6 +16,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import br.com.casalapp.api.dtos.PessoaDto;
 import br.com.casalapp.api.entities.Pessoa;
 import br.com.casalapp.api.repositories.PessoaRepository;
 import br.com.casalapp.api.services.PessoaService;
@@ -59,6 +60,5 @@ public class PessoaServiceTest {
 
 		assertTrue(pessoa.isPresent());
 	}
-
-
+	
 }

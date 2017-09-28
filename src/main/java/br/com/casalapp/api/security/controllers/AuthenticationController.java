@@ -24,10 +24,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.casalapp.api.controllers.PessoaController;
+import br.com.casalapp.api.entities.Pessoa;
 import br.com.casalapp.api.response.Response;
 import br.com.casalapp.api.security.dto.JwtAuthenticationDto;
 import br.com.casalapp.api.security.dto.TokenDto;
 import br.com.casalapp.api.security.utils.JwtTokenUtil;
+import br.com.casalapp.api.services.PessoaService;
 
 
 @RestController
@@ -47,6 +50,12 @@ public class AuthenticationController {
 
 	@Autowired
 	private UserDetailsService userDetailsService;
+	
+	@Autowired
+	private PessoaService pessoaService;
+	
+	private @Autowired HttpServletRequest request;
+
 
 	/**
 	 * Gera e retorna um novo token JWT.
@@ -68,15 +77,20 @@ public class AuthenticationController {
 			return ResponseEntity.badRequest().body(response);
 		}
 
-		log.info("Gerando token para o email {}.", authenticationDto.getEmail());
-		Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-				authenticationDto.getEmail(), authenticationDto.getSenha()));
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-
-		UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationDto.getEmail());
-		String token = jwtTokenUtil.obterToken(userDetails);
-		response.setData(new TokenDto(token));
-
+		Optional<Pessoa> pessoa = pessoaService.buscarPorEmail(authenticationDto.getEmail());
+		
+		if(pessoa.isPresent()) {
+			log.info("Gerando token para o email {}.", authenticationDto.getEmail());
+			Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+					pessoa.get().getId(), authenticationDto.getSenha()));
+			SecurityContextHolder.getContext().setAuthentication(authentication);
+			
+			UserDetails userDetails = userDetailsService.loadUserByUsername(pessoa.get().getId()+"");
+			String token = jwtTokenUtil.obterToken(userDetails);
+			response.setData(new TokenDto(token));
+			
+		}
+		
 		return ResponseEntity.ok(response);
 	}
 
@@ -109,6 +123,43 @@ public class AuthenticationController {
 		String refreshedToken = jwtTokenUtil.refreshToken(token.get());
 		response.setData(new TokenDto(refreshedToken));
 		return ResponseEntity.ok(response);
+	}
+	
+	/**
+	 * Gera um novo token com uma nova data de expiração.
+	 * 
+	 * @param request
+	 * @return ResponseEntity<Response<TokenDto>>
+	 */
+	@PostMapping(value = "/refresh-parceiro")
+	public ResponseEntity<Response<TokenDto>> gerarRefreshTokenJwtComParceiro(HttpServletRequest request) {
+		log.info("Gerando refresh token JWT.");
+		Response<TokenDto> response = new Response<TokenDto>();
+		Optional<String> token = Optional.ofNullable(request.getHeader(TOKEN_HEADER));
+		
+		if (token.isPresent() && token.get().startsWith(BEARER_PREFIX)) {
+			token = Optional.of(token.get().substring(7));
+        }
+		
+		if (!token.isPresent()) {
+			response.getErrors().add("Token não informado.");
+		} else if (!jwtTokenUtil.tokenValido(token.get())) {
+			response.getErrors().add("Token inválido ou expirado.");
+		}
+		
+		if (!response.getErrors().isEmpty()) { 
+			return ResponseEntity.badRequest().body(response);
+		}
+		
+		Optional<Pessoa> pessoa = pessoaService.buscarPorId(jwtTokenUtil.getIdPessoaFromToken(token.get()));
+		if(pessoa.isPresent() && pessoa.get().getParceiro() != null) {
+			String refreshedToken = jwtTokenUtil.refreshTokenComParceiro(token.get(), pessoa.get().getParceiro().getId());
+			response.setData(new TokenDto(refreshedToken));
+			return ResponseEntity.ok(response);
+		}else {
+			return gerarRefreshTokenJwt(request);
+		}
+		
 	}
 
 }

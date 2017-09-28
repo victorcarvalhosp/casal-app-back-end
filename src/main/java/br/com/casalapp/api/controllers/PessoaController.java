@@ -1,102 +1,59 @@
 package br.com.casalapp.api.controllers;
 
-import java.math.BigDecimal;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.casalapp.api.dtos.Dto;
+import br.com.casalapp.api.dtos.ParearDto;
 import br.com.casalapp.api.dtos.PessoaDto;
 import br.com.casalapp.api.entities.Pessoa;
+import br.com.casalapp.api.mappers.PessoaMapper;
 import br.com.casalapp.api.response.Response;
 import br.com.casalapp.api.services.CrudService;
 import br.com.casalapp.api.services.PessoaService;
-import br.com.casalapp.api.utils.PasswordUtils;
 
 
 @RestController
-@RequestMapping("/api/pessoas")
+@RequestMapping("/pessoas")
 @CrossOrigin(origins = "*")
-public class PessoaController extends CrudController<Pessoa>{
+public class PessoaController extends CrudController<Pessoa, PessoaDto>{
 
 	@Autowired
 	private PessoaService pessoaService;
+	
+	@Autowired
+	private PessoaMapper pessoaMapper;
+	
 
 	public PessoaController() {
 	}
-
-	/**
-	 * Atualiza os dados de um pessoa.
-	 * 
-	 * @param id
-	 * @param pessoaDto
-	 * @param result
-	 * @return ResponseEntity<Response<PessoaDto>>
-	 * @throws NoSuchAlgorithmException
-	 */
-//	@PutMapping(value = "/{id}")
-//	public ResponseEntity<Response<PessoaDto>> atualizar(@PathVariable("id") Long id,
-//			@Valid @RequestBody PessoaDto pessoaDto, BindingResult result) throws NoSuchAlgorithmException {
-//		log.info("Atualizando pessoa: {}", pessoaDto.toString());
-//		Response<PessoaDto> response = new Response<PessoaDto>();
-//
-//		Optional<Pessoa> pessoa = this.pessoaService.buscarPorId(id);
-//		if (!pessoa.isPresent()) {
-//			result.addError(new ObjectError("pessoa", "Pessoa não encontrado."));
-//		}
-//		
-//		this.atualizarDadosPessoa(pessoa.get(), pessoaDto, result);
-//
-//		if (result.hasErrors()) {
-//			log.error("Erro validando pessoa: {}", result.getAllErrors());
-//			result.getAllErrors().forEach(error -> response.getErrors().add(error.getDefaultMessage()));
-//			return ResponseEntity.badRequest().body(response);
-//		}
-//
-//		this.pessoaService.persistir(pessoa.get());
-//		response.setData(this.convertEntityToDto(pessoa.get()));
-//
-//		return ResponseEntity.ok(response);
-//	}
-
-//	/**
-//	 * Atualiza os dados do pessoa com base nos dados encontrados no DTO.
-//	 * 
-//	 * @param pessoa
-//	 * @param pessoaDto
-//	 * @param result
-//	 * @throws NoSuchAlgorithmException
-//	 */
-//	private void atualizarDadosPessoa(Pessoa pessoa, PessoaDto pessoaDto, BindingResult result)
-//			throws NoSuchAlgorithmException {
-//		pessoa.setNome(pessoaDto.getNome());
-//
-//		if (!pessoa.getEmail().equals(pessoaDto.getEmail())) {
-//			this.pessoaService.buscarPorEmail(pessoaDto.getEmail())
-//					.ifPresent(func -> result.addError(new ObjectError("email", "Email já existente.")));
-//			pessoa.setEmail(pessoaDto.getEmail());
-//		}
-//
-//		if (pessoaDto.getSenha().isPresent()) {
-//			pessoa.setSenha(PasswordUtils.gerarBCrypt(pessoaDto.getSenha().get()));
-//		}
-//	}
 	
+	
+	@PostMapping(value="/parear")
+	public ResponseEntity<Response<PessoaDto>> parear(@Valid @RequestBody ParearDto dto,
+			BindingResult result) throws NoSuchAlgorithmException {
+		Response<PessoaDto> response = new Response<PessoaDto>();
+
+		Pessoa entidade = pessoaService.parear(dto.getId(), dto.getIdParceiro());
+		
+		response.setData(this.convertEntityToDto(entidade));
+		return ResponseEntity.ok(response);
+	}
+
 	@GetMapping(value = "/buscarPorEmail/{email}")
 	public ResponseEntity<Response<PessoaDto>> buscarPorEmail(@PathVariable("email") String email) {
 		log.info("Buscando lançamento por ID: {}", email);
@@ -112,6 +69,24 @@ public class PessoaController extends CrudController<Pessoa>{
 		response.setData(this.convertEntityToDto(pessoa.get()));
 		return ResponseEntity.ok(response);
 	}
+	
+	@GetMapping(value = "/pedidos-pareamento/{email}")
+	public ResponseEntity<Response<Iterable<PessoaDto>>> buscarPedidosPareamento(@PathVariable("email") String email) {
+		log.info("Buscando todos os registros");
+		Response<Iterable<PessoaDto>> response = new Response<Iterable<PessoaDto>>();
+		Iterable<Pessoa> list = pessoaService.buscarPedidosPareamento(email);
+
+		if (list == null) {
+			log.info("Nenhum registro encontrado");
+			response.getErrors().add("Nenhum registro encontrado");
+			return ResponseEntity.badRequest().body(response);
+		}
+
+		List<PessoaDto> listDto = new ArrayList<>();
+		list.forEach(lancamento -> listDto.add(this.convertEntityToDto(lancamento)));
+		response.setData(listDto);
+		return ResponseEntity.ok(response);
+	}
 
 	/**
 	 * Retorna um DTO com os dados de um pessoa.
@@ -121,24 +96,19 @@ public class PessoaController extends CrudController<Pessoa>{
 	 */
 	@Override
 	public PessoaDto convertEntityToDto(Pessoa pessoa) {
-		PessoaDto pessoaDto = new PessoaDto();
-		pessoaDto.setId(pessoa.getId());
-		pessoaDto.setEmail(pessoa.getEmail());
-		pessoaDto.setNome(pessoa.getNome());
-
-		return pessoaDto;
+		return pessoaMapper.toDto(pessoa);
 	}
 
 	@Override
-	public Pessoa convertDtoToEntity(Dto cadastroDto) {
-		// TODO Auto-generated method stub
-		return null;
+	public Pessoa convertDtoToEntity(PessoaDto dto) {
+		return pessoaMapper.toEntity(dto);
 	}
 
 	@Override
 	public CrudService<Pessoa> getService() {
-		// TODO Auto-generated method stub
 		return pessoaService;
 	}
+	
+	
 
 }

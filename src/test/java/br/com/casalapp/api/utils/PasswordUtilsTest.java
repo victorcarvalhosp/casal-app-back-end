@@ -21,7 +21,7 @@ public class PasswordUtilsTest {
 	@Test
 	public void testGerarHashSenha() throws Exception {
 		String hash = PasswordUtils.gerarBCrypt(SENHA);
-		
+		System.out.println(hash);
 		assertTrue(bCryptEncoder.matches(SENHA, hash));
 	}
 

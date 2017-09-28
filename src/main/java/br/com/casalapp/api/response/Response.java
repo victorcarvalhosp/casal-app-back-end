@@ -7,17 +7,17 @@ import br.com.casalapp.api.dtos.Dto;
 
 public class Response<T> {
 
-	private Dto data;
+	private T data;
 	private List<String> errors;
 
 	public Response() {
 	}
 
-	public Dto getData() {
+	public T getData() {
 		return data;
 	}
 
-	public void setData(Dto data) {
+	public void setData(T data) {
 		this.data = data;
 	}
 

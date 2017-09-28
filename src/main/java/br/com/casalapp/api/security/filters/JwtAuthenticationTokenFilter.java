@@ -36,11 +36,11 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         if (token != null && token.startsWith(BEARER_PREFIX)) {
         	token = token.substring(7);
         }
-        String username = jwtTokenUtil.getUsernameFromToken(token);
+        Long id = jwtTokenUtil.getIdPessoaFromToken(token);
 
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+        if (id != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+            UserDetails userDetails = this.userDetailsService.loadUserByUsername(id+"");
             
             if (jwtTokenUtil.tokenValido(token)) {
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());

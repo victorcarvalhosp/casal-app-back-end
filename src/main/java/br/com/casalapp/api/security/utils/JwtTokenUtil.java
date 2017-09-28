@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import br.com.casalapp.api.security.JwtUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -20,6 +21,9 @@ public class JwtTokenUtil {
 	static final String CLAIM_KEY_ROLE = "role";
 	static final String CLAIM_KEY_AUDIENCE = "audience";
 	static final String CLAIM_KEY_CREATED = "created";
+	static final String CLAIM_KEY_EMAIL = "email";
+	static final String CLAIM_KEY_PARCEIRO = "parceiroId";
+
 
 	@Value("${jwt.secret}")
 	private String secret;
@@ -33,15 +37,26 @@ public class JwtTokenUtil {
 	 * @param token
 	 * @return String
 	 */
-	public String getUsernameFromToken(String token) {
-		String username;
+	public Long getIdPessoaFromToken(String token) {
+		Long id;
 		try {
 			Claims claims = getClaimsFromToken(token);
-			username = claims.getSubject();
+			id = Long.valueOf(claims.getSubject());
 		} catch (Exception e) {
-			username = null;
+			id = null;
 		}
-		return username;
+		return id;
+	}
+	
+	public Long getIdParceiroFromToken(String token) {
+		Long idParceiro;
+		try {
+			Claims claims = getClaimsFromToken(token);
+			idParceiro =  claims.get(CLAIM_KEY_PARCEIRO, Long.class);
+		} catch (Exception e) {
+			idParceiro = null;
+		}
+		return idParceiro;
 	}
 
 	/**
@@ -78,6 +93,19 @@ public class JwtTokenUtil {
 		}
 		return refreshedToken;
 	}
+	
+	public String refreshTokenComParceiro(String token, Long parceiroId) {
+		String refreshedToken;
+		try {
+			Claims claims = getClaimsFromToken(token);
+			claims.put(CLAIM_KEY_CREATED, new Date());
+			claims.put(CLAIM_KEY_PARCEIRO, parceiroId);
+			refreshedToken = gerarToken(claims);
+		} catch (Exception e) {
+			refreshedToken = null;
+		}
+		return refreshedToken;
+	}
 
 	/**
 	 * Verifica e retorna se um token JWT é válido.
@@ -97,9 +125,11 @@ public class JwtTokenUtil {
 	 */
 	public String obterToken(UserDetails userDetails) {
 		Map<String, Object> claims = new HashMap<>();
-		claims.put(CLAIM_KEY_USERNAME, userDetails.getUsername());
+		claims.put(CLAIM_KEY_USERNAME, ((JwtUser) userDetails).getId());
 		userDetails.getAuthorities().forEach(authority -> claims.put(CLAIM_KEY_ROLE, authority.getAuthority()));
 		claims.put(CLAIM_KEY_CREATED, new Date());
+		claims.put(CLAIM_KEY_EMAIL, ((JwtUser) userDetails).getUsername());
+		claims.put(CLAIM_KEY_PARCEIRO, ((JwtUser) userDetails).getIdParceiro());
 
 		return gerarToken(claims);
 	}
@@ -120,6 +150,7 @@ public class JwtTokenUtil {
 		}
 		return claims;
 	}
+	
 
 	/**
 	 * Retorna a data de expiração com base na data atual.

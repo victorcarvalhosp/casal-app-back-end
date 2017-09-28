@@ -1,9 +1,12 @@
 package br.com.casalapp.api.controllers;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.Test;
@@ -21,6 +24,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import br.com.casalapp.api.dtos.PessoaDto;
 import br.com.casalapp.api.entities.Pessoa;
 import br.com.casalapp.api.services.PessoaService;
 
@@ -36,7 +40,7 @@ public class PessoaControllerTest {
 	@MockBean
 	private PessoaService pessoaService;
 
-	private static final String PESSOAS_URL = "/api/pessoas/";
+	private static final String PESSOAS_URL = "/pessoas/";
 	private static final String URL_BUSCAR_EMAIL = PESSOAS_URL+ "buscarPorEmail/";
 	private static final Long ID = Long.valueOf(1);
 	private static final String NOME = "Fulano de tal";
@@ -67,6 +71,31 @@ public class PessoaControllerTest {
 				.andExpect(jsonPath("$.data.nome", equalTo(NOME)))
 				.andExpect(jsonPath("$.data.email", equalTo(EMAIL)))
 				.andExpect(jsonPath("$.errors").isEmpty());
+	}
+	
+	@Test
+	@WithMockUser
+	public void testFindAll() throws Exception{
+		BDDMockito.given(this.pessoaService.findAll())
+		.willReturn(mockFindAll());
+		
+		mvc.perform(MockMvcRequestBuilders.get(PESSOAS_URL)
+				.accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
+			    .andExpect(jsonPath("$.data", hasSize(2)))
+				.andExpect(jsonPath("$.data.[0].id").value(ID))
+				.andExpect(jsonPath("$.data.[0].nome", equalTo(NOME)))
+				.andExpect(jsonPath("$.data.[0].email", equalTo(EMAIL)))
+				.andExpect(jsonPath("$.errors").isEmpty());
+
+	}
+	
+	private List<Pessoa> mockFindAll(){
+		List<Pessoa> list = new ArrayList<>();
+		for (int i = 0; i < 2; i++) {
+			list.add(obterDadosPessoa());
+		}
+		return list;
 	}
 
 	private Pessoa obterDadosPessoa() {

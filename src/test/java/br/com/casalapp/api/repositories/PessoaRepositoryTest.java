@@ -1,7 +1,6 @@
 package br.com.casalapp.api.repositories;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 import java.security.NoSuchAlgorithmException;
 
@@ -16,7 +15,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import br.com.casalapp.api.entities.Pessoa;
 import br.com.casalapp.api.enums.PerfilEnum;
-import br.com.casalapp.api.repositories.PessoaRepository;
 import br.com.casalapp.api.utils.PasswordUtils;
 
 
