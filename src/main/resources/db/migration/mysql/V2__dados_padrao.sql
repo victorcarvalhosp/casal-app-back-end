@@ -237,11 +237,41 @@ INSERT INTO tarefa(
             'Ir na padária', 8);
 
 
+/* Recompensas modelo*/
+INSERT INTO recompensa(
+            id, data_criacao, descricao, icone, modelo, titulo)
+    VALUES (1, '2018-09-02', 'Recompense seu(ua) parceiro(a) com 15 minutos de massagem', 'massage.svg', true, 'Massagem - 15 minutos');
+
+    INSERT INTO recompensa(
+            id, data_criacao, descricao, icone, modelo, titulo)
+    VALUES (2, '2018-09-02', 'Recompense seu(ua) parceiro(a) levando-o(a) para jantar fora', 'dinner.svg', true, 'Jantar fora');
+
+     INSERT INTO recompensa(
+            id, data_criacao, descricao, icone, modelo, titulo)
+    VALUES (3, '2018-09-02', 'Recompense seu(ua) parceiro(a) com doces', 'chocolate.svg', true, 'Doces');
+
+    INSERT INTO recompensa(
+            id, data_criacao, descricao, icone, modelo, titulo)
+    VALUES (4, '2018-09-02', 'Recompense seu(ua) parceiro(a) com salgadinhos', 'snacks.svg', true, 'Salgadinhos');
+
+INSERT INTO recompensa(
+            id, data_criacao, descricao, icone, modelo, titulo)
+    VALUES (5, '2018-09-02', 'Recompense seu(ua) parceiro(a) com 15 minutos de cafuné', 'treatment.svg', true, 'Cafuné - 15 minutos');
+
+    INSERT INTO recompensa(
+            id, data_criacao, descricao, icone, modelo, titulo)
+    VALUES (6, '2018-09-02', 'Recompense seu(ua) parceiro(a) com um belo presente', 'gift.svg', true, 'Presente');
+
+    INSERT INTO recompensa(
+            id, data_criacao, descricao, icone, modelo, titulo)
+    VALUES (7, '2018-09-02', 'Recompense seu(ua) parceiro(a) deixando-o(a) com o controle da TV', 'television.svg', true, 'Controle da TV');
+
 
 SELECT setval('tarefa_id_seq', 30, true);
 SELECT setval('lista_tarefas_id_seq', 8, true);
 SELECT setval('configuracoes_id_seq', 1, true);
 SELECT setval('pessoa_id_seq', 1, true);
+SELECT setval('recompensa_id_seq', 7, true);
 
 
 

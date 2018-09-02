@@ -10,5 +10,9 @@ public interface ListaTarefasService extends CrudService<ListaTarefas> {
 	Boolean verificarSeJahRealizouAlgumCadastro(Long idPessoa);
 
 	Boolean confirmouTodasTarefas(ListaTarefas lista);
-	
+
+	Integer totalTarefasRestantesParaConclusao(Long idLista);
+
+	Integer totalTarefasRestantesParaConclusaoSemConfirmacao(Long idLista);
+
 }

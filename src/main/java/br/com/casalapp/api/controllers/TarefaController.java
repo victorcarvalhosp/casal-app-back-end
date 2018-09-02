@@ -64,6 +64,18 @@ public class TarefaController extends CrudController<Tarefa, TarefaDto>{
 		response.setData(this.convertEntityToDto(entidade));
 		return ResponseEntity.ok(response);
 	}
+
+
+	@PutMapping(value="{id}/cancelar-finalizacao")
+	public ResponseEntity<Response<TarefaDto>> cancelarFinalizacao(@PathVariable("id") Long idTarefa, @Valid @RequestBody TarefaDto dto, BindingResult result) throws NoSuchAlgorithmException {
+		log.info("Atualizando registro: {}", dto.toString());
+		Response<TarefaDto> response = new Response<TarefaDto>();
+
+		Tarefa entidade = service.atualizarComoFinalizacaoNaoConfirmada(idTarefa);
+
+		response.setData(this.convertEntityToDto(entidade));
+		return ResponseEntity.ok(response);
+	}
 	
 	@GetMapping(value="/parceiro")
 	public ResponseEntity<Response<TreeMap<PeriodoTarefaEnum,List <TarefaDto>>>> buscarTarefasParceiroNaoFinalizadas() {

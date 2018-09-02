@@ -39,6 +39,32 @@ public class ListaTarefasServiceImpl extends CrudServiceImpl<ListaTarefas> imple
 		}
 		return true;
 	}
+
+	@Override
+	public Integer totalTarefasRestantesParaConclusao(Long idLista) {
+		ListaTarefas lista = findOne(idLista);
+		Integer totalRestantes = lista.getTarefas().size();
+		for (Tarefa tarefa : lista.getTarefas()) {
+			if(tarefa.getFinalizadoConfirmado()) {
+				totalRestantes--;
+			}
+		}
+		return totalRestantes;
+	}
+
+	@Override
+	public Integer totalTarefasRestantesParaConclusaoSemConfirmacao(Long idLista) {
+		ListaTarefas lista = findOne(idLista);
+		Integer totalRestantes = lista.getTarefas().size();
+		for (Tarefa tarefa : lista.getTarefas()) {
+			if(tarefa.getFinalizado()) {
+				totalRestantes--;
+			}
+		}
+		return totalRestantes;
+	}
+
+
 	
 	@Override
 	protected CrudRepository<ListaTarefas, Long> getRepository() {

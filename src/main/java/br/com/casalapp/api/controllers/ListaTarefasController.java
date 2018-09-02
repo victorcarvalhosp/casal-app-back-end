@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import br.com.casalapp.api.dtos.TarefaDto;
+import br.com.casalapp.api.entities.Tarefa;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -85,6 +87,36 @@ public class ListaTarefasController extends CrudController<ListaTarefas, ListaTa
 			return ResponseEntity.badRequest().body(response);
 		}
 		response.setData(totalCadastro);
+		return ResponseEntity.ok(response);
+	}
+
+	@GetMapping(value="/total-restantes-sem-confirmacao/{id}")
+	public ResponseEntity<Response<Integer>> totalTarefasRestantesParaConclusaoSemConfirmacao(@PathVariable("id") Long listaTarefasId) {
+		log.info("Buscando todos os registros");
+		Response<Integer> response = new Response<Integer>();
+		Integer totalRestantes = getService().totalTarefasRestantesParaConclusaoSemConfirmacao(listaTarefasId);
+		if (totalRestantes == null) {
+			log.info("Nenhum registro encontrado");
+			response.getErrors().add("Nenhum registro encontrado");
+			return ResponseEntity.badRequest().body(response);
+		}
+
+		response.setData(totalRestantes);
+		return ResponseEntity.ok(response);
+	}
+
+	@GetMapping(value="/total-restantes/{id}")
+	public ResponseEntity<Response<Integer>> totalTarefasRestantesParaConclusao(@PathVariable("id") Long listaTarefasId) {
+		log.info("Buscando totalTarefasRestantesParaConclusao");
+		Response<Integer> response = new Response<Integer>();
+		Integer totalRestantes = getService().totalTarefasRestantesParaConclusao(listaTarefasId);
+		if (totalRestantes == null) {
+			log.info("Nenhum registro encontrado");
+			response.getErrors().add("Nenhum registro encontrado");
+			return ResponseEntity.badRequest().body(response);
+		}
+
+		response.setData(totalRestantes);
 		return ResponseEntity.ok(response);
 	}
 

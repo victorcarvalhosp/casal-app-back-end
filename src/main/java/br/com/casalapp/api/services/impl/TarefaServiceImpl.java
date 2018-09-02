@@ -137,4 +137,13 @@ public class TarefaServiceImpl extends CrudServiceImpl<Tarefa> implements Tarefa
 		return tarefa;
 	}
 
+	@Override
+	public Tarefa atualizarComoFinalizacaoNaoConfirmada(Long idTarefa) {
+		Tarefa tarefa = findOne(idTarefa);
+		tarefa.setFinalizado(false);
+		tarefa.setFinalizadoConfirmado(false);
+		tarefa = save(tarefa);
+		return tarefa;
+	}
+
 }

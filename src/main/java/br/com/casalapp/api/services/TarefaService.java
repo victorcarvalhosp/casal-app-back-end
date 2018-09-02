@@ -35,5 +35,8 @@ public interface TarefaService extends CrudService<Tarefa> {
 	
 	Tarefa atualizarComoFinalizacaoConfirmada(Long idTarefa);
 
-	
+	Tarefa atualizarComoFinalizacaoNaoConfirmada(Long idTarefa);
+
+
+
 }
