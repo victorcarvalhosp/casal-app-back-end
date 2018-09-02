@@ -6,6 +6,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.casalapp.api.entities.Configuracoes;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -36,21 +37,22 @@ public class ListaTarefasRepositoryTest {
 	
 	@Autowired
 	private PessoaRepository pessoaRepository;
+
+	@Autowired
+	private ConfiguracoesRepository configRepository;
 	
 	@Before
 	public void setUp() throws Exception {
-//		this.repository.save(obterDadosListaTarefas());
 	}
 
 	@After
 	public final void tearDown() {
-		//this.empresaRepository.deleteAll();
+		this.repository.deleteAll();
 	}
 
 	@Test
 	public void testSave() {
 		this.repository.save(obterDadosListaTarefas());
-
 		Assert.notNull(repository.findAll());
 	}
 
@@ -80,6 +82,10 @@ public class ListaTarefasRepositoryTest {
 		criador.setNome("Nome");
 		criador.setPerfil(PerfilEnum.ROLE_USUARIO);
 		criador.setSenha("123456");
+		Configuracoes config = new Configuracoes();
+		config.setPessoa(criador);
+//		configRepository.save(config);
+		criador.setConfiguracoes(config);
 		pessoaRepository.save(criador);
 	}
 

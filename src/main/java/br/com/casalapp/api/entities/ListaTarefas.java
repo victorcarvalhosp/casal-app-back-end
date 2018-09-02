@@ -33,6 +33,7 @@ public class ListaTarefas extends AbstractBaseEntity implements Serializable {
 	private String descricao;
 	private TipoListaEnum tipo;
 	private Recompensa recompensa;
+	private Integer diasRepeticao;
 
 	public ListaTarefas() {
 	}
@@ -107,6 +108,15 @@ public class ListaTarefas extends AbstractBaseEntity implements Serializable {
 
 	public void setRecompensa(Recompensa recompensa) {
 		this.recompensa = recompensa;
+	}
+
+	@Column(name="dias_repeticao", nullable=true)
+	public Integer getDiasRepeticao() {
+		return diasRepeticao;
+	}
+
+	public void setDiasRepeticao(Integer diasRepeticao) {
+		this.diasRepeticao = diasRepeticao;
 	}
 
 	@Override

@@ -22,7 +22,7 @@ public class Configuracoes extends AbstractBaseEntity implements Serializable {
 
 	public Configuracoes() {
 	}
-	
+
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	public Long getId() {

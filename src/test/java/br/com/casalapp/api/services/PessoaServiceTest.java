@@ -1,10 +1,7 @@
 package br.com.casalapp.api.services;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
-import java.util.Optional;
-
+import br.com.casalapp.api.entities.Pessoa;
+import br.com.casalapp.api.repositories.PessoaRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,10 +13,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import br.com.casalapp.api.dtos.PessoaDto;
-import br.com.casalapp.api.entities.Pessoa;
-import br.com.casalapp.api.repositories.PessoaRepository;
-import br.com.casalapp.api.services.PessoaService;
+import java.util.Optional;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 
 @RunWith(SpringRunner.class)

@@ -21,7 +21,9 @@ public class TarefaMapper implements DefaultMapper<Tarefa, TarefaDto>{
 		dto.setListaId(entidade.getLista().getId());
 		dto.setListaTitulo(entidade.getLista().getTitulo());
 		dto.setListaIcone(entidade.getLista().getTipo().getImg());
-		dto.setRecompensaIcone(entidade.getLista().getRecompensa().getIcone());
+		if(entidade.getLista().getRecompensa() != null) {
+			dto.setRecompensaIcone(entidade.getLista().getRecompensa().getIcone());
+		}
 		dto.setCriadorId(entidade.getLista().getCriador().getId());
 		return dto;
 	}

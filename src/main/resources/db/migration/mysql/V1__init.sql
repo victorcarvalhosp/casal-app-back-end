@@ -45,7 +45,8 @@ CREATE TABLE lista_tarefas (
     tipo_lista character varying(255) NOT NULL,
     titulo character varying(255),
     criador_id bigint,
-    recompensa_id bigint
+    recompensa_id bigint,
+    dias_repeticao bigint
 );
 
 

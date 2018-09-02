@@ -8,9 +8,11 @@ public enum TipoListaEnum {
 	VARRER_CASA("Varrer casa", "050-broom.svg"),
 	CASA("Cuidados com a casa", "012-house.svg"),
 	CONSERTO_ITENS("Conserto de itens","005-briefcase.svg"),
-	LAVAR_ITEM("Lavar item", "023-gloves.svg"),
 	BONS_MODOS("Bons modos", "gentleman.svg"),
-	HIGIENE("Higiene", "higiene.svg");
+	HIGIENE("Higiene", "higiene.svg"),
+	LIMPEZA_OUTROS("Limpeza em geral", "023-gloves.svg"),
+	ATIVIDADE_EXTERNA("Atividade externa", "050-broom.svg"),
+	FAZER_COMIDA("Alimentação", "alimentacao.svg");
 	
 	private final String label;
 	private final String img;
