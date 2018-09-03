@@ -6,7 +6,7 @@ CREATE TABLE configuracoes (
 );
 
 
-ALTER TABLE configuracoes OWNER TO postgres;
+-- ALTER TABLE configuracoes OWNER TO postgres;
 
 --
 -- TOC entry 174 (class 1259 OID 134433)
@@ -21,7 +21,7 @@ CREATE SEQUENCE configuracoes_id_seq
     CACHE 1;
 
 
-ALTER TABLE configuracoes_id_seq OWNER TO postgres;
+-- ALTER TABLE configuracoes_id_seq OWNER TO postgres;
 
 --
 -- TOC entry 2063 (class 0 OID 0)
@@ -50,7 +50,7 @@ CREATE TABLE lista_tarefas (
 );
 
 
-ALTER TABLE lista_tarefas OWNER TO postgres;
+-- ALTER TABLE lista_tarefas OWNER TO postgres;
 
 --
 -- TOC entry 176 (class 1259 OID 134441)
@@ -65,7 +65,7 @@ CREATE SEQUENCE lista_tarefas_id_seq
     CACHE 1;
 
 
-ALTER TABLE lista_tarefas_id_seq OWNER TO postgres;
+-- ALTER TABLE lista_tarefas_id_seq OWNER TO postgres;
 
 --
 -- TOC entry 2064 (class 0 OID 0)
@@ -93,7 +93,7 @@ CREATE TABLE pessoa (
 );
 
 
-ALTER TABLE pessoa OWNER TO postgres;
+-- ALTER TABLE pessoa OWNER TO postgres;
 
 --
 -- TOC entry 178 (class 1259 OID 134452)
@@ -108,7 +108,7 @@ CREATE SEQUENCE pessoa_id_seq
     CACHE 1;
 
 
-ALTER TABLE pessoa_id_seq OWNER TO postgres;
+-- ALTER TABLE pessoa_id_seq OWNER TO postgres;
 
 --
 -- TOC entry 2065 (class 0 OID 0)
@@ -134,7 +134,7 @@ CREATE TABLE recompensa (
 );
 
 
-ALTER TABLE recompensa OWNER TO postgres;
+-- ALTER TABLE recompensa OWNER TO postgres;
 
 --
 -- TOC entry 180 (class 1259 OID 134463)
@@ -149,7 +149,7 @@ CREATE SEQUENCE recompensa_id_seq
     CACHE 1;
 
 
-ALTER TABLE recompensa_id_seq OWNER TO postgres;
+-- ALTER TABLE recompensa_id_seq OWNER TO postgres;
 
 --
 -- TOC entry 2066 (class 0 OID 0)
@@ -175,7 +175,7 @@ CREATE TABLE recompensa_pessoa (
 );
 
 
-ALTER TABLE recompensa_pessoa OWNER TO postgres;
+-- ALTER TABLE recompensa_pessoa OWNER TO postgres;
 
 --
 -- TOC entry 182 (class 1259 OID 134474)
@@ -190,7 +190,7 @@ CREATE SEQUENCE recompensa_pessoa_id_seq
     CACHE 1;
 
 
-ALTER TABLE recompensa_pessoa_id_seq OWNER TO postgres;
+-- ALTER TABLE recompensa_pessoa_id_seq OWNER TO postgres;
 
 --
 -- TOC entry 2067 (class 0 OID 0)
@@ -218,7 +218,7 @@ CREATE TABLE tarefa (
 );
 
 
-ALTER TABLE tarefa OWNER TO postgres;
+-- ALTER TABLE tarefa OWNER TO postgres;
 
 --
 -- TOC entry 184 (class 1259 OID 134482)
@@ -233,7 +233,7 @@ CREATE SEQUENCE tarefa_id_seq
     CACHE 1;
 
 
-ALTER TABLE tarefa_id_seq OWNER TO postgres;
+-- ALTER TABLE tarefa_id_seq OWNER TO postgres;
 
 --
 -- TOC entry 2068 (class 0 OID 0)
