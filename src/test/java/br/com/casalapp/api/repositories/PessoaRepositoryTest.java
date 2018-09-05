@@ -36,13 +36,12 @@ public class PessoaRepositoryTest {
 
 	@After
 	public final void tearDown() {
-		//this.empresaRepository.deleteAll();
+		this.pessoaRepository.deleteAll();
 	}
 
 	@Test
 	public void testBuscarPessoaPorEmail() {
 		Pessoa pessoa = this.pessoaRepository.findByEmail(EMAIL);
-
 		assertEquals(EMAIL, pessoa.getEmail());
 	}
 
@@ -53,7 +52,7 @@ public class PessoaRepositoryTest {
 		pessoa.setSenha(PasswordUtils.gerarBCrypt("123456"));
 		pessoa.setEmail(EMAIL);
 		Configuracoes config = new Configuracoes();
-		config.setId(Long.valueOf(1));
+		config.setPessoa(pessoa);
 		pessoa.setConfiguracoes(config);
 		return pessoa;
 	}

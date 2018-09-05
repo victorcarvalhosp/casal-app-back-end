@@ -38,9 +38,6 @@ public class ListaTarefasRepositoryTest {
 	@Autowired
 	private PessoaRepository pessoaRepository;
 
-	@Autowired
-	private ConfiguracoesRepository configRepository;
-	
 	@Before
 	public void setUp() throws Exception {
 	}
@@ -84,7 +81,6 @@ public class ListaTarefasRepositoryTest {
 		criador.setSenha("123456");
 		Configuracoes config = new Configuracoes();
 		config.setPessoa(criador);
-//		configRepository.save(config);
 		criador.setConfiguracoes(config);
 		pessoaRepository.save(criador);
 	}

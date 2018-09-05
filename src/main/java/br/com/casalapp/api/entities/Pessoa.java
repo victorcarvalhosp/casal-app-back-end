@@ -1,22 +1,14 @@
 package br.com.casalapp.api.entities;
 
 import java.io.Serializable;
+import java.security.NoSuchAlgorithmException;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import br.com.casalapp.api.enums.PerfilEnum;
+import br.com.casalapp.api.utils.PasswordUtils;
 
-	
+
 @Entity
 @Table(name = "pessoa")
 public class Pessoa extends AbstractBaseEntity implements Serializable {
@@ -29,7 +21,7 @@ public class Pessoa extends AbstractBaseEntity implements Serializable {
 	private PerfilEnum perfil;
 	private Pessoa parceiro;
 	private Configuracoes configuracoes;
-	
+
 
 	public Pessoa() {
 	}
@@ -101,6 +93,19 @@ public class Pessoa extends AbstractBaseEntity implements Serializable {
 	@Override
 	public String toString() {
 		return "Pessoa [id=" + id + ", nome=" + nome + ", email=" + email + ", senha=" + senha;
+	}
+
+	@Transient
+	public Pessoa getPessoaMock() {
+		Pessoa pessoa = new Pessoa();
+		pessoa.setNome("Fulano de Tal");
+		pessoa.setEmail("email@email.com");
+		pessoa.setPerfil(PerfilEnum.ROLE_USUARIO);
+		pessoa.setSenha(PasswordUtils.gerarBCrypt("123456"));
+		Configuracoes config = new Configuracoes();
+		config.setPessoa(pessoa);
+		pessoa.setConfiguracoes(config);
+		return pessoa;
 	}
 
 }

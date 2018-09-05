@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.com.casalapp.api.entities.Pessoa;
@@ -25,15 +26,24 @@ public class PessoaServiceImpl extends CrudServiceImpl<Pessoa> implements Pessoa
 	
 	@Autowired
 	private JwtTokenUtil jwtTokenUtil;
-	
+	private final BCryptPasswordEncoder bCryptEncoder = new BCryptPasswordEncoder();
+
+
+
 	public Optional<Pessoa> buscarPorEmail(String email) {
 		log.info("Buscando funcionário pelo email {}", email);
 		return Optional.ofNullable(this.pessoaRepository.findByEmail(email));
 	}
 
 	public Optional<Pessoa> buscarPorEmailESenha(String email, String senha) {
-		log.info("Buscando funcionário pelo email {}", email);
-		return Optional.ofNullable(this.pessoaRepository.findByEmailAndSenha(email, PasswordUtils.gerarBCrypt(senha)));
+		log.info("Buscando pessoa por email e senha", email, senha);
+		Optional<Pessoa> pessoa = Optional.ofNullable(this.pessoaRepository.findByEmail(email));
+		if(pessoa.isPresent()){
+			if(bCryptEncoder.matches(senha, pessoa.get().getSenha())){
+				return  pessoa;
+			}
+		}
+		return Optional.empty();
 	}
 	
 	@Override
