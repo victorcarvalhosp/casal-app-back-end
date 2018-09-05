@@ -2,6 +2,7 @@ package br.com.casalapp.api.services.impl;
 
 import java.util.Optional;
 
+import br.com.casalapp.api.utils.PasswordUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,11 @@ public class PessoaServiceImpl extends CrudServiceImpl<Pessoa> implements Pessoa
 	public Optional<Pessoa> buscarPorEmail(String email) {
 		log.info("Buscando funcionário pelo email {}", email);
 		return Optional.ofNullable(this.pessoaRepository.findByEmail(email));
+	}
+
+	public Optional<Pessoa> buscarPorEmailESenha(String email, String senha) {
+		log.info("Buscando funcionário pelo email {}", email);
+		return Optional.ofNullable(this.pessoaRepository.findByEmailAndSenha(email, PasswordUtils.gerarBCrypt(senha)));
 	}
 	
 	@Override

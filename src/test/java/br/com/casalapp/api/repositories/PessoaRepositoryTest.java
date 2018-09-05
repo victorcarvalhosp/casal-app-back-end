@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.security.NoSuchAlgorithmException;
 
+import br.com.casalapp.api.entities.Configuracoes;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -51,6 +52,9 @@ public class PessoaRepositoryTest {
 		pessoa.setPerfil(PerfilEnum.ROLE_USUARIO);
 		pessoa.setSenha(PasswordUtils.gerarBCrypt("123456"));
 		pessoa.setEmail(EMAIL);
+		Configuracoes config = new Configuracoes();
+		config.setId(Long.valueOf(1));
+		pessoa.setConfiguracoes(config);
 		return pessoa;
 	}
 

@@ -77,7 +77,7 @@ public class AuthenticationController {
 			return ResponseEntity.badRequest().body(response);
 		}
 
-		Optional<Pessoa> pessoa = pessoaService.buscarPorEmail(authenticationDto.getEmail());
+		Optional<Pessoa> pessoa = pessoaService.buscarPorEmailESenha(authenticationDto.getEmail(), authenticationDto.getSenha());
 		
 		if(pessoa.isPresent()) {
 			log.info("Gerando token para o email {}.", authenticationDto.getEmail());
@@ -88,10 +88,12 @@ public class AuthenticationController {
 			UserDetails userDetails = userDetailsService.loadUserByUsername(pessoa.get().getId()+"");
 			String token = jwtTokenUtil.obterToken(userDetails);
 			response.setData(new TokenDto(token));
-			
+			return ResponseEntity.ok(response);
+
+		}else{
+			return ResponseEntity.status(401).build();
 		}
 		
-		return ResponseEntity.ok(response);
 	}
 
 	/**

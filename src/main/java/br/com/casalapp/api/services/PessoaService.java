@@ -14,6 +14,8 @@ public interface PessoaService extends CrudService<Pessoa> {
 	 * @return Optional<Pessoa>
 	 */
 	Optional<Pessoa> buscarPorEmail(String email);
+
+	Optional<Pessoa> buscarPorEmailESenha(String email, String senha);
 	
 	Iterable<Pessoa> buscarPedidosPareamento(String email);
 	

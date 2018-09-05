@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import br.com.casalapp.api.entities.Configuracoes;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.BDDMockito;
@@ -103,6 +104,9 @@ public class PessoaControllerTest {
 		pessoa.setId(ID);
 		pessoa.setNome(NOME);
 		pessoa.setEmail(EMAIL);
+		Configuracoes config = new Configuracoes();
+		config.setId(ID);
+		pessoa.setConfiguracoes(config);
 		return pessoa;
 	}
 
